@@ -10,7 +10,6 @@ const server = createServer((req, res) => {
     filePath = './login.html';
   }
 
-  // Definir o tipo de conteúdo baseado na extensão
   const extname = path.extname(filePath);
   let contentType = 'text/html';
 
@@ -32,7 +31,7 @@ const server = createServer((req, res) => {
   });
 });
 
-// Iniciar o servidor na porta 3000
+
 server.listen(3000, '127.0.0.1', () => {
   console.log('Servidor rodando em http://127.0.0.1:3000');
 });

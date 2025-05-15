@@ -8,28 +8,48 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/doador")
+@CrossOrigin(origins = "http://127.0.0.1:3000")
 public class DoadorController {
 
     private final DoadorDAO dao = new DoadorDAO();
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<String> cadastrar(@RequestBody Doador doador) {
-        Long idUsuario = dao.buscarIdUsuarioPorEmail(doador.getEmail());
-
-        if (idUsuario == null) {
-            return new ResponseEntity<>("Usuário não encontrado!", HttpStatus.BAD_REQUEST); // Se não encontrar o usuário
-        }
-
-        // Atribui o idUsuario encontrado ao doador
-        doador.setIdUsuario(idUsuario);
-
-        // Verifica se o doador já existe
+    public ResponseEntity<?> cadastrarDoador(@RequestBody Doador doador) {
         if (dao.doadorExistePorIdUsuario(doador.getIdUsuario())) {
-            return new ResponseEntity<>("Doador já cadastrado!", HttpStatus.BAD_REQUEST);  // Se doador já estiver cadastrado
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Doador já cadastrado.");
         }
 
-        // Caso o doador não exista, salva o novo doador
         dao.salvar(doador);
-        return new ResponseEntity<>("Doador cadastrado com sucesso!", HttpStatus.CREATED);  // Retorna 201 - Created
+        return ResponseEntity.status(HttpStatus.CREATED).body("Doador cadastrado com sucesso.");
     }
+
+
+
+    @GetMapping("/verificar")
+    public ResponseEntity<Boolean> verificarDoador(@RequestParam String email) {
+        Long idUsuario = dao.buscarIdUsuarioPorEmail(email);
+        if (idUsuario == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+        }
+
+        boolean existe = dao.doadorExistePorIdUsuario(idUsuario);
+        return ResponseEntity.ok(existe);
+    }
+
+    @GetMapping("/usuario/{id}")
+    public ResponseEntity<Doador> buscarPorIdUsuario(@PathVariable Long id) {
+        if (id == null || id <= 0) {
+            return ResponseEntity.badRequest().build(); // Retorna 400 para IDs inválidos
+        }
+
+        Doador doador = dao.buscarPorIdUsuario(id);
+        if (doador != null) {
+            return ResponseEntity.ok(doador);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Retorna 404 se não encontrado
+        }
+    }
+
+
+
 }

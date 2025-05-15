@@ -26,12 +26,11 @@ document.addEventListener('DOMContentLoaded', function () {
         .then((data) => {
             if (data.message === 'Login bem-sucedido!') {
                 console.log('Login realizado com sucesso!', data);
-                console.log(localStorage.getItem('idusuario_tipo'));
 
-                localStorage.setItem('idusuario_tipo', data.idusuario_tipo);
-                localStorage.setItem('idusuario', data.idusuario);
+        
+                localStorage.setItem('idusuario_tipo', String(data.idusuario_tipo));
+                localStorage.setItem('idusuario', String(data.idusuario)); 
 
-                // Redirecionar para a dashboard
                 window.location.href = '/dashboard.html';
             } else {
                 alert(data.message || 'Email ou senha inválidos, ou usuário inativo.');

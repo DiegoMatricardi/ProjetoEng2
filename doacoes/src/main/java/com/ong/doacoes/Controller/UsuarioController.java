@@ -17,13 +17,15 @@ public class UsuarioController {
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody Usuario usuario) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody Usuario usuario) {
         Usuario usuarioAutenticado = usuarioDAO.buscarUsuarioPorEmailESenha(usuario.getEmail(), usuario.getSenha());
 
-        Map<String, String> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
 
         if (usuarioAutenticado != null && usuarioAutenticado.getAtivo() == 1) {
             response.put("message", "Login bem-sucedido!");
+            response.put("idusuario", String.valueOf(usuarioAutenticado.getIdUsuario())); // Adiciona o ID do usuário
+            response.put("idusuario_tipo", String.valueOf(usuarioAutenticado.getIdUsuarioTipo())); // Adiciona o tipo do usuário
             return ResponseEntity.ok(response);
         } else {
             response.put("message", "Email ou senha inválidos, ou usuário inativo.");

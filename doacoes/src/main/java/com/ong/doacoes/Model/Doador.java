@@ -20,9 +20,6 @@ public class Doador {
         this.telefone = telefone;
     }
 
-    public Doador(String nome, String cpf, String telefone, String email) {
-    }
-
     public Long getIdDoador() {
         return idDoador;
     }

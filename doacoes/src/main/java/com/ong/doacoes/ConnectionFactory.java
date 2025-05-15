@@ -25,7 +25,6 @@ public class ConnectionFactory {
                 String password = props.getProperty("db.password");
 
                 connection = DriverManager.getConnection(url, username, password);
-                System.out.println("Conexão estabelecida com sucesso!");
             } catch (Exception e) {
                 System.err.println("Erro na conexão: " + e.getMessage());
                 throw new SQLException(e);

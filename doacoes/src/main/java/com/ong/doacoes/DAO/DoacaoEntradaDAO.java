@@ -1,4 +1,4 @@
 package com.ong.doacoes.DAO;
 
-public class DoacaoDAO {
+public class DoacaoEntradaDAO {
 }

@@ -59,4 +59,31 @@ public class DoadorDAO {
             System.err.println("Erro ao salvar doador: " + e.getMessage());
         }
     }
+
+    public Doador buscarPorIdUsuario(Long idUsuario) {
+        String sql = "SELECT * FROM doador WHERE idusuario = ?";
+        Doador doador = null;
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, idUsuario);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                doador = new Doador();
+                doador.setIdUsuario(rs.getLong("idusuario"));
+                doador.setNome(rs.getString("nome"));
+                doador.setCpf(rs.getString("cpf"));
+                doador.setEmail(rs.getString("email"));
+                doador.setTelefone(rs.getString("telefone"));
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao buscar doador por idusuario: " + e.getMessage());
+        }
+
+        return doador;
+    }
+
 }
