@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
             window.location.href = 'cadastroDoador.html';
           } else if (response.ok) {
             console.log('Usuário é doador, redirecionando para criar doação.');
-            window.location.href = '/cadastroDoador.html';
+            window.location.href = '/criarDoacao.html';
           } else {
             console.error('Erro na resposta do servidor:', response.status);
             alert('Erro ao verificar se o usuário é um doador.');

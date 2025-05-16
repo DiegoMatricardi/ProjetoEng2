@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Minha Conta</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+  <nav class="bg-blue-600 p-4 shadow-md">
+    <div class="container mx-auto flex justify-between items-center">
+      <div class="text-white font-bold text-2xl">Minha Conta</div>
+      <a href="dashboard.html" class="text-white hover:underline">Voltar</a>
+    </div>
+  </nav>
+
+  <main class="pt-16 container mx-auto px-4">
+    <div class="bg-white rounded-lg shadow-md p-6 max-w-lg mx-auto">
+      <h2 class="text-2xl font-semibold text-gray-700 text-center mb-6">Seus Dados</h2>
+
+      <form id="editarContaForm">
+        <div class="mb-4">
+          <label for="nome" class="block text-gray-700 font-medium">Nome</label>
+          <input type="text" id="nome" name="nome" disabled required class="w-full p-3 mt-1 border border-gray-300 rounded-lg shadow-sm bg-gray-100">
+        </div>
+
+        <div class="mb-4">
+          <label for="email" class="block text-gray-700 font-medium">E-mail</label>
+          <input type="email" id="email" name="email" disabled required class="w-full p-3 mt-1 border border-gray-300 rounded-lg shadow-sm bg-gray-100">
+        </div>
+
+        <div class="mb-4">
+          <label for="cpf" class="block text-gray-700 font-medium">CPF</label>
+          <input type="text" id="cpf" name="cpf" disabled required class="w-full p-3 mt-1 border border-gray-300 rounded-lg shadow-sm bg-gray-100">
+        </div>
+
+        <div class="mb-4">
+          <label for="telefone" class="block text-gray-700 font-medium">Telefone</label>
+          <input type="text" id="telefone" name="telefone" disabled required class="w-full p-3 mt-1 border border-gray-300 rounded-lg shadow-sm bg-gray-100">
+        </div>
+
+        <div class="flex justify-center gap-4 mt-6">
+          <button type="button" id="editarBtn" class="bg-yellow-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-yellow-600">
+            Editar
+          </button>
+
+          <button type="submit" id="salvarBtn" class="bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-700 hidden">
+            Salvar
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script src="./JS/Conta.js"></script>
+</body>
+</html>

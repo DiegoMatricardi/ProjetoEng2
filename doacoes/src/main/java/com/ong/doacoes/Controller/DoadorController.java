@@ -24,7 +24,6 @@ public class DoadorController {
     }
 
 
-
     @GetMapping("/verificar")
     public ResponseEntity<Boolean> verificarDoador(@RequestParam String email) {
         Long idUsuario = dao.buscarIdUsuarioPorEmail(email);
@@ -50,6 +49,18 @@ public class DoadorController {
         }
     }
 
+    @PutMapping("/atualizar")
+    public ResponseEntity<String> atualizarDoador(@RequestBody Doador doador) {
+        if (doador.getIdUsuario() == null || doador.getIdUsuario() <= 0) {
+            return ResponseEntity.badRequest().body("Id de usuario invalido!");
+        }
+        boolean atualizado = dao.atualizar(doador);
 
+        if (atualizado) {
+            return ResponseEntity.ok("Atualizado com sucesso.");
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doador não encontrado.");
+        }
+    }
 
 }

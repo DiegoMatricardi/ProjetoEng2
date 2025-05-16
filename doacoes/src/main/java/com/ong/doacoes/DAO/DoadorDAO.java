@@ -86,4 +86,25 @@ public class DoadorDAO {
         return doador;
     }
 
+    public boolean atualizar(Doador doador) {
+        String sql = "UPDATE doador SET nome = ?, cpf = ?, email = ?, telefone = ? WHERE idusuario = ?";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, doador.getNome());
+            stmt.setString(2, doador.getCpf());
+            stmt.setString(3, doador.getEmail());
+            stmt.setString(4, doador.getTelefone());
+            stmt.setLong(5, doador.getIdUsuario());
+
+            int linhasAfetadas = stmt.executeUpdate();
+            return linhasAfetadas > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }
