@@ -11,7 +11,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/usuario")
-@CrossOrigin(origins = "http://127.0.0.1:3000") // Permite requisições do front-end
+@CrossOrigin(origins = "http://127.0.0.1:3000")
 public class UsuarioController {
 
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();
@@ -24,8 +24,8 @@ public class UsuarioController {
 
         if (usuarioAutenticado != null && usuarioAutenticado.getAtivo() == 1) {
             response.put("message", "Login bem-sucedido!");
-            response.put("idusuario", String.valueOf(usuarioAutenticado.getIdUsuario())); // Adiciona o ID do usuário
-            response.put("idusuario_tipo", String.valueOf(usuarioAutenticado.getIdUsuarioTipo())); // Adiciona o tipo do usuário
+            response.put("idusuario", String.valueOf(usuarioAutenticado.getIdUsuario()));
+            response.put("idusuario_tipo", String.valueOf(usuarioAutenticado.getIdUsuarioTipo()));
             return ResponseEntity.ok(response);
         } else {
             response.put("message", "Email ou senha inválidos, ou usuário inativo.");
@@ -51,4 +51,6 @@ public class UsuarioController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
 }

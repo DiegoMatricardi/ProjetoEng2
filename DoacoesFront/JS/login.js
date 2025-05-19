@@ -28,10 +28,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log('Login realizado com sucesso!', data);
 
         
-                localStorage.setItem('idusuario_tipo', String(data.idusuario_tipo));
+                localStorage.setItem('idusuario_tipo',data.idusuario_tipo);
                 localStorage.setItem('idusuario', String(data.idusuario)); 
 
-                window.location.href = '/dashboard.html';
+                window.location.href = 'dashboard.html';
             } else {
                 alert(data.message || 'Email ou senha inválidos, ou usuário inativo.');
             }

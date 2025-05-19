@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/doador")
 @CrossOrigin(origins = "http://127.0.0.1:3000")
@@ -38,14 +40,14 @@ public class DoadorController {
     @GetMapping("/usuario/{id}")
     public ResponseEntity<Doador> buscarPorIdUsuario(@PathVariable Long id) {
         if (id == null || id <= 0) {
-            return ResponseEntity.badRequest().build(); // Retorna 400 para IDs inválidos
+            return ResponseEntity.badRequest().build();
         }
 
         Doador doador = dao.buscarPorIdUsuario(id);
         if (doador != null) {
             return ResponseEntity.ok(doador);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Retorna 404 se não encontrado
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
@@ -63,4 +65,27 @@ public class DoadorController {
         }
     }
 
+    @GetMapping("/listar")
+    public ResponseEntity<List<Doador>> listarTodos() {
+        List<Doador> doadores = dao.listarTodos();
+        if (doadores.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(doadores);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> excluirDoador(@PathVariable Long id) {
+        if (id == null || id <= 0) {
+            return ResponseEntity.badRequest().body("ID inválido.");
+        }
+
+        boolean excluido = dao.excluir(id);
+
+        if (excluido) {
+            return ResponseEntity.ok("Doador excluído com sucesso.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doador não encontrado.");
+        }
+    }
 }

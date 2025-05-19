@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DoadorDAO {
 
@@ -106,5 +108,49 @@ public class DoadorDAO {
             return false;
         }
     }
+
+    public List<Doador> listarTodos() {
+        List<Doador> doadores = new ArrayList<>();
+        String sql = "SELECT * FROM doador";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Doador doador = new Doador();
+                doador.setIdDoador(rs.getLong("iddoador"));
+                doador.setIdUsuario(rs.getLong("idusuario"));
+                doador.setCpf(rs.getString("cpf"));
+                doador.setEmail(rs.getString("email"));
+                doador.setNome(rs.getString("nome"));
+                doador.setTelefone(rs.getString("telefone"));
+                doadores.add(doador);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return doadores;
+    }
+
+    public boolean excluir(Long id) {
+        DoacaoEntradaDAO doacaoDAO = new DoacaoEntradaDAO();
+
+        boolean doacoesExcluidas = doacaoDAO.excluirPorIdDoador(id);
+        if (!doacoesExcluidas) {
+            return false;
+        }
+
+        String sql = "DELETE FROM doador WHERE iddoador = ?";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, id);
+            int linhasAfetadas = stmt.executeUpdate();
+            return linhasAfetadas > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
 }

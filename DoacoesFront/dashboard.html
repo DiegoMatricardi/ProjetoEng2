@@ -16,6 +16,7 @@
         <a href="#" id="buscarLink" class="text-white hover:underline">Buscar Doações</a>
         <a href="#" id="familiasLink" class="text-white hover:underline">Famílias</a>
         <a href="conta.html" id="contaLink" class="text-white hover:underline">Conta</a>
+        <a href="todos-doadores.html" id="todosDoadoresLink" class="text-white hover:underline hidden">Todos Doadores</a>
         <button id="logoutButton" class="bg-white text-green-600 font-semibold px-4 py-2 rounded hover:bg-gray-200">Sair</button>
       </div>
     </div>
@@ -23,7 +24,7 @@
 
   <main class="pt-24 container mx-auto px-4">
     <h1 class="text-3xl font-bold text-gray-700 mb-8">Suas Doações:</h1>
-
+    <div id="cardsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12"></div>
     <div class="flex justify-center">
       <a href="#" id="criarDoacaoBtn" class="bg-green-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-green-700 transition">
         Criar Nova Doação

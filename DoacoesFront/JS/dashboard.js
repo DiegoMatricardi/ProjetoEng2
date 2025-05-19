@@ -1,14 +1,20 @@
 document.addEventListener('DOMContentLoaded', function () {
   const usuarioId = localStorage.getItem('idusuario'); 
+  const usuarioTipo = localStorage.getItem('idusuario_tipo');
 
-  console.log('ID do usuário:', usuarioId);
+  console.log('usuarioTipo:', usuarioTipo);
+
+  if (usuarioTipo === '2') {
+    const todosDoadoresLink = document.getElementById('todosDoadoresLink');
+    if (todosDoadoresLink) {
+      todosDoadoresLink.classList.remove('hidden');
+    }
+  }
 
   const criarDoacaoBtn = document.getElementById('criarDoacaoBtn');
   if (criarDoacaoBtn) {
     criarDoacaoBtn.addEventListener('click', function (event) {
       event.preventDefault();
-
-      console.log('usuarioId para requisição:', usuarioId);
       fetch(`http://localhost:8080/doador/usuario/${usuarioId}`)
         .then(response => {
           if (response.status === 404) {
@@ -17,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
             window.location.href = 'cadastroDoador.html';
           } else if (response.ok) {
             console.log('Usuário é doador, redirecionando para criar doação.');
-            window.location.href = '/criarDoacao.html';
+            window.location.href = 'criarDoacao.html';
           } else {
             console.error('Erro na resposta do servidor:', response.status);
             alert('Erro ao verificar se o usuário é um doador.');
