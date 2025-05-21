@@ -11,6 +11,10 @@ public class ItemTipo {
         this.descricao = descricao;
     }
 
+    public ItemTipo() {
+
+    }
+
     public Long getIditemTipo() {
         return iditemTipo;
     }

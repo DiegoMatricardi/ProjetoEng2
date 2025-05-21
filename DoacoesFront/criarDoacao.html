@@ -1,12 +1,117 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Doação</title>
-    <script src="https://cdn.tailwindcss.com"></script></head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cadastro de Doação</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    
+<body class="bg-gray-100 p-8">
+  <div class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-md">
+    <h1 class="text-2xl font-bold mb-6">Cadastro de Doação</h1>
+    <form id="formDoacao" class="space-y-4">
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block font-semibold">Data de Abertura</label>
+          <input type="date" name="dataentrada" class="w-full border rounded p-2" required>
+        </div>
+        <div>
+          <label class="block font-semibold">Data de Busca</label>
+          <input type="date" name="tipoentrega" class="w-full border rounded p-2">
+        </div>
+        <div>
+          <label class="block font-semibold">Data de Fim</label>
+          <input type="date" name="datafim" class="w-full border rounded p-2">
+        </div>
+        <div>
+          <label class="block font-semibold">Data de Notificação</label>
+          <input type="date" name="datanotificacao" class="w-full border rounded p-2">
+        </div>
+        <div>
+          <label class="block font-semibold">Endereço</label>
+          <input type="text" name="endereco" class="w-full border rounded p-2">
+        </div>
+        <div>
+          <label class="block font-semibold">Bairro</label>
+          <input type="text" name="bairro" class="w-full border rounded p-2">
+        </div>
+        <div>
+          <label class="block font-semibold">Cidade</label>
+          <input type="text" name="cidade" class="w-full border rounded p-2">
+        </div>
+        <div>
+          <label class="block font-semibold">Estado</label>
+          <input type="text" name="estado" class="w-full border rounded p-2">
+        </div>
+        <div>
+          <label class="block font-semibold">Status</label>
+          <select name="status" class="w-full border rounded p-2" required>
+            <option value="P">Pendente</option>
+            <option value="A">Aprovado</option>
+            <option value="C">Concluído</option>
+          </select>
+        </div>
+      </div>
+      <h2 class="text-xl font-bold mt-8 mb-2">Itens da Doação</h2>
+      <table class="w-full border rounded mb-4" id="tabelaItens">
+        <thead>
+          <tr class="bg-gray-200">
+            <th class="p-2 border">Tipo de Item</th>
+            <th class="p-2 border">Descrição</th>
+            <th class="p-2 border">Quantidade</th>
+            <th class="p-2 border">Ações</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <button type="button" onclick="adicionarItem()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">+ Adicionar Item</button>
+      <div class="mt-6">
+        <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700">Enviar Doação</button>
+      </div>
+    </form>
+  </div>
+  <script>
+    let tiposItens = [];
+
+    async function carregarTiposItens() {
+      try {
+        const response = await fetch('http://localhost:8080/itemTipo/listar');
+        if (!response.ok) throw new Error('Erro ao carregar tipos de itens');
+        tiposItens = await response.json();
+      } catch (error) {
+        console.error('Erro ao carregar tipos de itens:', error);
+        alert('Erro ao carregar tipos de itens: ' + error.message);
+      }
+    }
+
+    function adicionarItem() {
+      const tabela = document.querySelector("#tabelaItens tbody");
+      const linha = document.createElement("tr");
+      const options = tiposItens.map(tipo => 
+        `<option value="${tipo.iditemTipo}">${tipo.nome}</option>`
+      ).join('');
+      linha.innerHTML = `
+        <td class="border p-2">
+          <select name="itens[].idItem" class="w-full p-1 border rounded" required>
+            ${options}
+          </select>
+        </td>
+        <td class="border p-2">
+        <input type="text" name="itens[].descricao" class="w-full p-1 border rounded" placeholder="Descrição do item" required>
+        </td>
+        <td class="border p-2">
+          <input type="number" name="itens[].valorQtdeDoacaoEntradaItem" class="w-full p-1 border rounded" step="0.01" min="0.01" required>
+        </td>
+        <td class="border p-2 text-center">
+          <button type="button" onclick="this.closest('tr').remove()" class="text-red-500 hover:underline">Remover</button>
+        </td>
+      `;
+      tabela.appendChild(linha);
+    }
+
+    // Carregar tipos de itens ao carregar a página
+    carregarTiposItens();
+  </script>
+  <script src="./JS/criarDoacao.js"></script>
 </body>
 </html>

@@ -1,32 +1,42 @@
 package com.ong.doacoes.Model;
 
+import java.sql.Timestamp;
+import java.util.List;
+
 public class DoacaoEntrada {
+
     private Long iddoacaoentrada;
-    private Long iddoador;
-    private Long idcolaborador;
-    private String dataentrada;
-    private String tipoentrega;
-    private String endereco;
-    private String bairro;
-    private String cidade;
-    private String estado;
     private String status;
+    private Timestamp dataAbertura;
+    private Timestamp dataBusca;
+    private Timestamp dataFim;
+    private Timestamp dataNotificacao;
+    private Long iddoador;
+    private String enderecoBusca;
+    private String observacao;
+    private Long idcolaborador;
+
+    private List<DoacaoEntradaItem> itens;
 
     public DoacaoEntrada() {
     }
 
-    public DoacaoEntrada(Long iddoacaoentrada, Long iddoador, Long idcolaborador, String dataentrada, String tipoentrega, String endereco, String bairro, String cidade, String estado, String status) {
+    public DoacaoEntrada(Long iddoacaoentrada, String status, Timestamp dataAbertura, Timestamp dataBusca,
+                         Timestamp dataFim, Timestamp dataNotificacao, Long iddoador, String enderecoBusca,
+                         String observacao, Long idcolaborador) {
         this.iddoacaoentrada = iddoacaoentrada;
-        this.iddoador = iddoador;
-        this.idcolaborador = idcolaborador;
-        this.dataentrada = dataentrada;
-        this.tipoentrega = tipoentrega;
-        this.endereco = endereco;
-        this.bairro = bairro;
-        this.cidade = cidade;
-        this.estado = estado;
         this.status = status;
+        this.dataAbertura = dataAbertura;
+        this.dataBusca = dataBusca;
+        this.dataFim = dataFim;
+        this.dataNotificacao = dataNotificacao;
+        this.iddoador = iddoador;
+        this.enderecoBusca = enderecoBusca;
+        this.observacao = observacao;
+        this.idcolaborador = idcolaborador;
     }
+
+    // Getters e Setters
 
     public Long getIddoacaoentrada() {
         return iddoacaoentrada;
@@ -34,70 +44,6 @@ public class DoacaoEntrada {
 
     public void setIddoacaoentrada(Long iddoacaoentrada) {
         this.iddoacaoentrada = iddoacaoentrada;
-    }
-
-    public Long getIddoador() {
-        return iddoador;
-    }
-
-    public void setIddoador(Long iddoador) {
-        this.iddoador = iddoador;
-    }
-
-    public Long getIdcolaborador() {
-        return idcolaborador;
-    }
-
-    public void setIdcolaborador(Long idcolaborador) {
-        this.idcolaborador = idcolaborador;
-    }
-
-    public String getDataentrada() {
-        return dataentrada;
-    }
-
-    public void setDataentrada(String dataentrada) {
-        this.dataentrada = dataentrada;
-    }
-
-    public String getTipoentrega() {
-        return tipoentrega;
-    }
-
-    public void setTipoentrega(String tipoentrega) {
-        this.tipoentrega = tipoentrega;
-    }
-
-    public String getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
-
-    public String getBairro() {
-        return bairro;
-    }
-
-    public void setBairro(String bairro) {
-        this.bairro = bairro;
-    }
-
-    public String getCidade() {
-        return cidade;
-    }
-
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
     }
 
     public String getStatus() {
@@ -108,4 +54,75 @@ public class DoacaoEntrada {
         this.status = status;
     }
 
+    public Timestamp getDataAbertura() {
+        return dataAbertura;
+    }
+
+    public void setDataAbertura(Timestamp dataAbertura) {
+        this.dataAbertura = dataAbertura;
+    }
+
+    public Timestamp getDataBusca() {
+        return dataBusca;
+    }
+
+    public void setDataBusca(Timestamp dataBusca) {
+        this.dataBusca = dataBusca;
+    }
+
+    public Timestamp getDataFim() {
+        return dataFim;
+    }
+
+    public void setDataFim(Timestamp dataFim) {
+        this.dataFim = dataFim;
+    }
+
+    public Timestamp getDataNotificacao() {
+        return dataNotificacao;
+    }
+
+    public void setDataNotificacao(Timestamp dataNotificacao) {
+        this.dataNotificacao = dataNotificacao;
+    }
+
+    public Long getIddoador() {
+        return iddoador;
+    }
+
+    public void setIddoador(Long iddoador) {
+        this.iddoador = iddoador;
+    }
+
+    public String getEnderecoBusca() {
+        return enderecoBusca;
+    }
+
+    public void setEnderecoBusca(String enderecoBusca) {
+        this.enderecoBusca = enderecoBusca;
+    }
+
+    public String getObservacao() {
+        return observacao;
+    }
+
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
+    }
+
+    public Long getIdcolaborador() {
+        return idcolaborador;
+    }
+
+    public void setIdcolaborador(Long idcolaborador) {
+        this.idcolaborador = idcolaborador;
+    }
+
+    public List<DoacaoEntradaItem> getItens() {
+        return itens;
+    }
+
+    public void setItens(List<DoacaoEntradaItem> itens) {
+        this.itens = itens;
+    }
 }

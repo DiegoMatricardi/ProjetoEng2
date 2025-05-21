@@ -88,4 +88,19 @@ public class DoadorController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doador não encontrado.");
         }
     }
+
+    @GetMapping("/buscarIdPorIdUsuario/{idUsuario}")
+    public ResponseEntity<Long> buscarIdDoadorPorIdUsuario(@PathVariable Long idUsuario) {
+        if (idUsuario == null || idUsuario <= 0) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        Doador doador = dao.buscarPorIdUsuario(idUsuario);
+        if (doador != null) {
+            return ResponseEntity.ok(doador.getIdDoador());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
 }

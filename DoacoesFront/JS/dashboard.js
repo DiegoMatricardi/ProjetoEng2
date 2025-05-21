@@ -1,38 +1,75 @@
-document.addEventListener('DOMContentLoaded', function () {
-  const usuarioId = localStorage.getItem('idusuario'); 
-  const usuarioTipo = localStorage.getItem('idusuario_tipo');
-
-  console.log('usuarioTipo:', usuarioTipo);
-
-  if (usuarioTipo === '2') {
-    const todosDoadoresLink = document.getElementById('todosDoadoresLink');
-    if (todosDoadoresLink) {
-      todosDoadoresLink.classList.remove('hidden');
+document.addEventListener('DOMContentLoaded', async function () {
+    const idUsuario = localStorage.getItem("idusuario");
+    if (!idUsuario) {
+        alert("Usuário não está logado. Por favor, faça login.");
+        window.location.href = "login.html";
+        return;
     }
-  }
 
-  const criarDoacaoBtn = document.getElementById('criarDoacaoBtn');
-  if (criarDoacaoBtn) {
-    criarDoacaoBtn.addEventListener('click', function (event) {
-      event.preventDefault();
-      fetch(`http://localhost:8080/doador/usuario/${usuarioId}`)
-        .then(response => {
-          if (response.status === 404) {
-            console.log('Usuário não é doador, redirecionando para cadastro.');
-            localStorage.setItem('voltarParaCriarDoacao', 'true');
-            window.location.href = 'cadastroDoador.html';
-          } else if (response.ok) {
-            console.log('Usuário é doador, redirecionando para criar doação.');
-            window.location.href = 'criarDoacao.html';
-          } else {
-            console.error('Erro na resposta do servidor:', response.status);
-            alert('Erro ao verificar se o usuário é um doador.');
-          }
-        })
-        .catch(error => {
-          console.error('Erro na requisição:', error);
-          alert('Erro ao conectar com o servidor.');
-        });
+    // Configurar botão "Criar Nova Doação"
+    document.getElementById("criarDoacaoBtn").addEventListener("click", function (e) {
+        e.preventDefault();
+        window.location.href = "criarDoacao.html";
     });
-  }
+
+    // Configurar logout
+    document.getElementById("logoutButton").addEventListener("click", function () {
+        localStorage.removeItem("idusuario");
+        localStorage.removeItem("idusuario_tipo");
+        window.location.href = "login.html";
+    });
+
+    // Carregar doações
+    try {
+        const response = await fetch(`http://localhost:8080/doacaoEntrada/listarPorIdUsuario/${idUsuario}`);
+        if (!response.ok) {
+            throw new Error(`Erro ${response.status}: ${await response.text()}`);
+        }
+        const doacoes = await response.json();
+        renderDoacoes(doacoes);
+    } catch (error) {
+        console.error("Erro ao carregar doações:", error);
+        alert("Erro ao carregar doações: " + error.message);
+        document.getElementById("cardsContainer").innerHTML = `
+            <p class="text-red-500 text-center">Erro ao carregar doações. Tente novamente mais tarde.</p>
+        `;
+    }
 });
+
+function renderDoacoes(doacoes) {
+    const container = document.getElementById("cardsContainer");
+    container.innerHTML = "";
+
+    if (doacoes.length === 0) {
+        container.innerHTML = `
+            <p class="text-gray-500 text-center col-span-full">Nenhuma doação encontrada.</p>
+        `;
+        return;
+    }
+
+    doacoes.forEach(doacao => {
+        const statusMap = {
+            "P": { text: "Pendente", color: "bg-yellow-100 text-yellow-800" },
+            "A": { text: "Aprovado", color: "bg-green-100 text-green-800" },
+            "C": { text: "Concluído", color: "bg-blue-100 text-blue-800" }
+        };
+        const status = statusMap[doacao.status] || { text: "Desconhecido", color: "bg-gray-100 text-gray-800" };
+
+        const dataAbertura = new Date(doacao.dataAbertura).toLocaleDateString("pt-BR");
+        const itensHtml = doacao.itens.map(item => `
+            <li>${item.nomeItemTipo}: ${item.valorQtdeDoacaoEntradaItem} unidade(s) - ${item.descricao}</li>
+        `).join("");
+
+        const card = `
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold text-gray-800 mb-2">Doação #${doacao.iddoacaoEntrada}</h2>
+                <p class="text-gray-600 mb-1"><strong>Data de Abertura:</strong> ${dataAbertura}</p>
+                <p class="text-gray-600 mb-1"><strong>Status:</strong> <span class="${status.color} px-2 py-1 rounded">${status.text}</span></p>
+                <p class="text-gray-600 mb-1"><strong>Endereço de Busca:</strong> ${doacao.enderecoBusca || "Não informado"}</p>
+                <p class="text-gray-600 mb-2"><strong>Itens Doados:</strong></p>
+                <ul class="list-disc pl-5 text-gray-600">${itensHtml}</ul>
+            </div>
+        `;
+        container.insertAdjacentHTML("beforeend", card);
+    });
+}

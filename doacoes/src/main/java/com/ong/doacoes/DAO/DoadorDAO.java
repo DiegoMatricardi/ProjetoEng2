@@ -74,6 +74,7 @@ public class DoadorDAO {
 
             if (rs.next()) {
                 doador = new Doador();
+                doador.setIdDoador(rs.getLong("iddoador"));
                 doador.setIdUsuario(rs.getLong("idusuario"));
                 doador.setNome(rs.getString("nome"));
                 doador.setCpf(rs.getString("cpf"));
@@ -87,6 +88,7 @@ public class DoadorDAO {
 
         return doador;
     }
+
 
     public boolean atualizar(Doador doador) {
         String sql = "UPDATE doador SET nome = ?, cpf = ?, email = ?, telefone = ? WHERE idusuario = ?";
