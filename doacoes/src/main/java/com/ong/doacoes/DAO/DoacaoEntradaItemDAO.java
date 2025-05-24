@@ -1,5 +1,6 @@
 package com.ong.doacoes.DAO;
 
+import com.ong.doacoes.ConnectionFactory;
 import com.ong.doacoes.Model.DoacaoEntradaItem;
 
 import java.sql.Connection;
@@ -56,6 +57,18 @@ public class DoacaoEntradaItemDAO {
         } catch (SQLException e) {
             System.err.println("Erro ao inserir item: " + e.getMessage());
             return false;
+        }
+    }
+
+    public boolean excluirPorDoacaoEntrada(Connection conn, long iddoacao_entrada) {
+        String sql = "DELETE FROM doacao_entrada_item WHERE iddoacao_entrada = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, iddoacao_entrada);
+            stmt.executeUpdate();
+            return true; // Retorna true mesmo se nenhum item for excluído (caso válido)
+        } catch (SQLException e) {
+            System.err.println("Erro ao excluir itens da doação: " + e.getMessage());
+            throw new RuntimeException("Erro ao excluir itens da doação: " + e.getMessage(), e);
         }
     }
 }

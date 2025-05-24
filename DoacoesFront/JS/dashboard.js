@@ -1,25 +1,40 @@
 document.addEventListener('DOMContentLoaded', async function () {
     const idUsuario = localStorage.getItem("idusuario");
+    const usuarioTipo = localStorage.getItem('idusuario_tipo');
+
     if (!idUsuario) {
         alert("Usuário não está logado. Por favor, faça login.");
         window.location.href = "login.html";
         return;
     }
 
-    // Configurar botão "Criar Nova Doação"
+    if (usuarioTipo === '2') {
+        const todosDoadoresLink = document.getElementById('todosDoadoresLink');
+        const colaboradoresLink = document.getElementById('colaboradoresLink');
+        const familiasLink = document.getElementById('familiasLink');
+        const buscarLink = document.getElementById('buscarLink');
+    if (todosDoadoresLink) {
+      todosDoadoresLink.classList.remove('hidden');
+      colaboradoresLink.classList.remove('hidden');
+      familiasLink.classList.remove('hidden');
+      buscarLink.classList.remove('hidden');
+    }
+  }
+
+    
     document.getElementById("criarDoacaoBtn").addEventListener("click", function (e) {
         e.preventDefault();
         window.location.href = "criarDoacao.html";
     });
 
-    // Configurar logout
+    
     document.getElementById("logoutButton").addEventListener("click", function () {
         localStorage.removeItem("idusuario");
         localStorage.removeItem("idusuario_tipo");
         window.location.href = "login.html";
     });
 
-    // Carregar doações
+    
     try {
         const response = await fetch(`http://localhost:8080/doacaoEntrada/listarPorIdUsuario/${idUsuario}`);
         if (!response.ok) {

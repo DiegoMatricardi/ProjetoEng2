@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Doações</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <nav class="bg-blue-600 p-4 shadow-md">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="text-white text-lg font-bold">ONG Doações</div>
+            <div class="space-x-4">
+                <a href="dashboard.html" class="text-white hover:text-gray-200">Início</a>
+                <a href="buscarDoacoes.html" class="text-white hover:text-gray-200">Consultar Doações</a>
+                <a href="familias.html" class="text-white hover:text-gray-200">Famílias</a>
+                <a href="Conta.html" class="text-white hover:text-gray-200">Conta</a>
+                <a href="todosDoadores.html" id="todosDoadoresLink" class="text-white hover:text-gray-200 hidden">Todos Doadores</a>
+                <a href="colaboradores.html" id="colaboradoresLink" class="text-white hover:text-gray-200 hidden">Colaboradores</a>
+                <button id="logoutButton" class="text-white hover:text-gray-200">Sair</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Buscar Doações</h1>
+        <div class="mb-6">
+            <h2 class="text-xl font-semibold mb-4">Filtrar Doações</h2>
+            <div id="mensagem" class="hidden p-4 mb-4 rounded"></div>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <div class="flex-1">
+                    <label for="statusFilter" class="block text-sm font-medium text-gray-700">Status</label>
+                    <select id="statusFilter" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <option value="Todos">Todos</option>
+                        <option value="P">Pendente</option>
+                        <option value="A">Aprovado</option>
+                        <option value="C">Concluído</option>
+                    </select>
+                </div>
+                <div class="flex-1">
+                    <label for="tipoItemFilter" class="block text-sm font-medium text-gray-700">Tipo de Item</label>
+                    <select id="tipoItemFilter" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <option value="Todos">Todos</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button id="filtrarBtn" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Filtrar</button>
+                </div>
+            </div>
+        </div>
+        <div id="doacoesContainer">
+            <table class="w-full border rounded">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="p-2 border">ID</th>
+                        <th class="p-2 border">Data de Abertura</th>
+                        <th class="p-2 border">Data de Validade</th>
+                        <th class="p-2 border">Status</th>
+                        <th class="p-2 border">Endereço de Busca</th>
+                        <th class="p-2 border">Itens</th>
+                        <th class="p-2 border">Observação</th>
+                        <th class="p-2 border">Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="doacoesTabela"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="./JS/buscarDoacao.js"></script>
+</body>
+</html>

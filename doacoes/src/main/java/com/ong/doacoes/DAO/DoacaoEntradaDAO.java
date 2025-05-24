@@ -6,7 +6,9 @@ import com.ong.doacoes.Model.DoacaoEntradaItem;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DoacaoEntradaDAO {
 
@@ -146,6 +148,98 @@ public class DoacaoEntradaDAO {
             }
         }
         return doacoes;
+    }
+
+    public List<DoacaoEntrada> listarComFiltros(String status, String tipoItem) throws SQLException {
+        List<DoacaoEntrada> doacoes = new ArrayList<>();
+        Map<Long, DoacaoEntrada> doacaoMap = new HashMap<>();
+
+        StringBuilder sql = new StringBuilder(
+                "SELECT de.iddoacao_entrada, de.iddoador, de.idcolaborador, de.status, de.data_abertura, de.data_busca, " +
+                        "de.data_fim, de.data_notificacao, de.endereco_busca, de.observacao, " +
+                        "dei.iddoacao_entrada_item, dei.valor_qtde_doacao_entrada_item, dei.descricao, dei.iditem, it.nome AS nomeItemTipo " +
+                        "FROM doacao_entrada de " +
+                        "LEFT JOIN doacao_entrada_item dei ON de.iddoacao_entrada = dei.iddoacao_entrada " +
+                        "LEFT JOIN item i ON dei.iditem = i.iditem " +
+                        "LEFT JOIN item_tipo it ON i.iditem_tipo = it.iditem_tipo " +
+                        "WHERE 1=1"
+        );
+
+        List<Object> params = new ArrayList<>();
+        if (status != null && !status.isEmpty() && !status.equals("Todos")) {
+            sql.append(" AND de.status = ?");
+            params.add(status);
+        }
+        if (tipoItem != null && !tipoItem.isEmpty() && !tipoItem.equals("Todos")) {
+            sql.append(" AND it.nome = ?");
+            params.add(tipoItem);
+        }
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+            for (int i = 0; i < params.size(); i++) {
+                stmt.setObject(i + 1, params.get(i));
+            }
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Long idDoacao = rs.getLong("iddoacao_entrada");
+                    DoacaoEntrada doacao = doacaoMap.get(idDoacao);
+
+                    if (doacao == null) {
+                        doacao = new DoacaoEntrada();
+                        doacao.setIddoacaoentrada(idDoacao);
+                        doacao.setIddoador(rs.getLong("iddoador"));
+                        doacao.setIdcolaborador(rs.getLong("idcolaborador"));
+                        doacao.setStatus(rs.getString("status"));
+                        doacao.setDataAbertura(rs.getTimestamp("data_abertura"));
+                        doacao.setDataBusca(rs.getTimestamp("data_busca"));
+                        doacao.setDataFim(rs.getTimestamp("data_fim"));
+                        doacao.setDataNotificacao(rs.getTimestamp("data_notificacao"));
+                        doacao.setEnderecoBusca(rs.getString("endereco_busca"));
+                        doacao.setObservacao(rs.getString("observacao"));
+                        doacao.setItens(new ArrayList<>());
+                        doacaoMap.put(idDoacao, doacao);
+                        doacoes.add(doacao);
+                    }
+
+                    if (rs.getLong("iddoacao_entrada_item") != 0) {
+                        DoacaoEntradaItem item = new DoacaoEntradaItem();
+                        item.setIddoacaoEntradaItem(rs.getLong("iddoacao_entrada_item"));
+                        item.setValorQtdeDoacaoEntradaItem(rs.getDouble("valor_qtde_doacao_entrada_item"));
+                        item.setIddoacaoEntrada(idDoacao);
+                        item.setDescricao(rs.getString("descricao"));
+                        item.setIdItem(rs.getLong("iditem"));
+                        doacao.getItens().add(item);
+                    }
+                }
+            }
+        }
+        return doacoes;
+    }
+
+    public List<String> listarTiposItem() throws SQLException {
+        List<String> tipos = new ArrayList<>();
+        String sql = "SELECT DISTINCT nome FROM item_tipo WHERE nome IS NOT NULL";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                tipos.add(rs.getString("nome"));
+            }
+        }
+        return tipos;
+    }
+
+    public boolean excluir(Connection conn, long iddoacao_entrada) {
+        String sql = "DELETE FROM doacao_entrada WHERE iddoacao_entrada = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, iddoacao_entrada);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.err.println("Erro ao excluir doação: " + e.getMessage());
+            throw new RuntimeException("Erro ao excluir doação: " + e.getMessage(), e);
+        }
     }
 }
 

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beneficiários</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <nav class="bg-blue-600 p-4 shadow-md">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="text-white text-lg font-bold">ONG Doações</div>
+            <div class="space-x-4">
+                <a href="dashboard.html" class="text-white hover:text-gray-200">Início</a>
+                <a href="buscarDoacoes.html" class="text-white hover:text-gray-200">Consultar Doações</a>
+                <a href="familias.html" class="text-white hover:text-gray-200">Famílias</a>
+                <a href="estoque.html" class="text-white hover:text-gray-200">Estoque</a>
+                <button id="logoutButton" class="text-white hover:text-gray-200">Sair</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Gerenciar Beneficiários</h1>
+        
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold mb-4">Adicionar Beneficiário</h2>
+            <div id="mensagem" class="hidden p-4 mb-4 rounded"></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="datetime-local" id="horarioDiaVisita" placeholder="Horário da Visita" class="p-2 border rounded">
+                <input type="text" id="nome" placeholder="Nome" class="p-2 border rounded" required>
+                <input type="email" id="email" placeholder="Email" class="p-2 border rounded">
+                <input type="text" id="telefone" placeholder="Telefone" class="p-2 border rounded">
+                <input type="text" id="endereco" placeholder="Endereço" class="p-2 border rounded">
+                <input type="text" id="complemento" placeholder="Complemento" class="p-2 border rounded">
+                <input type="text" id="bairro" placeholder="Bairro" class="p-2 border rounded">
+                <input type="text" id="cidade" placeholder="Cidade" class="p-2 border rounded">
+                <input type="text" id="cep" placeholder="CEP" class="p-2 border rounded">
+            </div>
+            <button id="inserirButton" class="mt-4 bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Adicionar</button>
+        </div>
+
+        <h2 class="text-xl font-semibold mb-4">Lista de Beneficiários</h2>
+        <table class="w-full border rounded">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th class="p-2 border">ID</th>
+                    <th class="p-2 border">Nome</th>
+                    <th class="p-2 border">Email</th>
+                    <th class="p-2 border">Telefone</th>
+                    <th class="p-2 border">Endereço</th>
+                    <th class="p-2 border">Visita</th>
+                </tr>
+            </thead>
+            <tbody id="beneficiariosTabela"></tbody>
+        </table>
+    </div>
+
+    <script src="./JS/familias.js"></script>
+</body>
+</html>

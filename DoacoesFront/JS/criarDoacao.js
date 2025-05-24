@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             bairro: formData.get("bairro") || "",
             cidade: formData.get("cidade") || "",
             estado: formData.get("estado") || "",
-            status: formData.get("status"),
+            status: "P",
             itens: []
         };
 
