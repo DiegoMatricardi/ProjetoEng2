@@ -9,6 +9,21 @@ import java.sql.SQLException;
 
 public class ItemDAO {
 
+    public double verificarEstoque(Connection conn, Long idItem) {
+        String sql = "SELECT estoque FROM item WHERE iditem = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, idItem);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("estoque");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao verificar estoque do item ID " + idItem + ": " + e.getMessage());
+        }
+        return 0.0; // Retorna 0 se o item não for encontrado ou houver erro
+    }
+
     public boolean atualizarEstoque(Connection conn, long idItem, double quantidade) {
         String sqlEstoque = "UPDATE item SET estoque = estoque + ? WHERE iditem = ?";
 

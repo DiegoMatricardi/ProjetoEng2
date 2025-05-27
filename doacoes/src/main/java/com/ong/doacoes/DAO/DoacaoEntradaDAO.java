@@ -3,6 +3,7 @@ package com.ong.doacoes.DAO;
 import com.ong.doacoes.ConnectionFactory;
 import com.ong.doacoes.Model.DoacaoEntrada;
 import com.ong.doacoes.Model.DoacaoEntradaItem;
+import com.ong.doacoes.Model.DoacaoSaidaItem;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -239,6 +240,51 @@ public class DoacaoEntradaDAO {
         } catch (SQLException e) {
             System.err.println("Erro ao excluir doação: " + e.getMessage());
             throw new RuntimeException("Erro ao excluir doação: " + e.getMessage(), e);
+        }
+    }
+
+    public boolean isDoacaoPendente(Connection conn, Long idDoacaoEntrada) {
+        String sql = "SELECT status FROM doacao_entrada WHERE iddoacao_entrada = ? AND status = 'P'";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, idDoacaoEntrada);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao validar doação de entrada ID " + idDoacaoEntrada + ": " + e.getMessage());
+            return false;
+        }
+    }
+
+    public List<DoacaoSaidaItem> listarItens(Connection conn, Long idDoacaoEntrada) {
+        List<DoacaoSaidaItem> itens = new ArrayList<>();
+        String sql = "SELECT iditem, valor_qtde_doacao_entrada_item FROM doacao_entrada_item WHERE iddoacao_entrada = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, idDoacaoEntrada);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    DoacaoSaidaItem item = new DoacaoSaidaItem();
+                    item.setIditem(rs.getLong("iditem"));
+                    item.setValorQtdeDoacaoSaidaItem(rs.getDouble("valor_qtde_doacao_entrada_item"));
+                    itens.add(item);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao listar itens da doação de entrada ID " + idDoacaoEntrada + ": " + e.getMessage());
+        }
+        return itens;
+    }
+
+    public boolean atualizarStatus(Connection conn, Long idDoacaoEntrada, char status) {
+        String sql = "UPDATE doacao_entrada SET status = ? WHERE iddoacao_entrada = ? AND status = 'P'";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, String.valueOf(status));
+            stmt.setLong(2, idDoacaoEntrada);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.err.println("Erro ao atualizar status da doação de entrada ID " + idDoacaoEntrada + ": " + e.getMessage());
+            return false;
         }
     }
 }

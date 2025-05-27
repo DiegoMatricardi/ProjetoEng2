@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Efetuar Doação de Saída</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <nav class="bg-blue-600 p-4 shadow-md">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="text-white text-lg font-bold">ONG Doações</div>
+            <div class="space-x-4">
+                <a href="dashboard.html" class="text-white hover:text-gray-200">Início</a>
+                <a href="buscarDoacoes.html" class="text-white hover:text-gray-200">Consultar Doações</a>
+                <a href="familias.html" class="text-white hover:text-gray-200">Famílias</a>
+                <a href="estoque.html" class="text-white hover:text-gray-200">Estoque</a>
+                <button id="logoutButton" class="text-white hover:text-gray-200">Sair</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Efetuar Doação de Saída</h1>
+        
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold mb-4">Selecionar Beneficiário e Doação</h2>
+            <div id="mensagem" class="hidden p-4 mb-4 rounded"></div>
+            
+            <h3 class="text-lg font-medium mb-2">Beneficiários</h3>
+            <div id="beneficiariosList" class="mb-6 max-h-64 overflow-y-auto border rounded">
+                <!-- Beneficiários serão carregados aqui -->
+            </div>
+
+            <h3 class="text-lg font-medium mb-2">Doações de Entrada Pendente</h3>
+            <div id="doacoesEntradaList" class="mb-6 max-h-64 overflow-y-auto border rounded">
+                <!-- Doações de entrada serão carregadas aqui -->
+            </div>
+
+            <button id="efetuarButton" class="mt-4 bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:bg-gray-400" disabled>Efetuar Doação</button>
+        </div>
+    </div>
+
+    <script src="./JS/efetuarDoacaoSaida.js"></script>
+</body>
+</html>

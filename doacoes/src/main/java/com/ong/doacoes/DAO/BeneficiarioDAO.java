@@ -38,6 +38,33 @@ public class BeneficiarioDAO {
         }
     }
 
+    public Beneficiario buscarPorId(Connection conn, Long id) {
+        String sql = "SELECT * FROM beneficiario WHERE idbeneficiario = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Beneficiario beneficiario = new Beneficiario();
+                    beneficiario.setIdbeneficiario(rs.getLong("idbeneficiario"));
+                    beneficiario.setHorarioDiaVisita(rs.getObject("horario_dia_visita", LocalDateTime.class));
+                    beneficiario.setBairro(rs.getString("bairro"));
+                    beneficiario.setCep(rs.getString("cep"));
+                    beneficiario.setCidade(rs.getString("cidade"));
+                    beneficiario.setComplemento(rs.getString("complemento"));
+                    beneficiario.setEmail(rs.getString("email"));
+                    beneficiario.setEndereco(rs.getString("endereco"));
+                    beneficiario.setNome(rs.getString("nome"));
+                    beneficiario.setTelefone(rs.getString("telefone"));
+                    return beneficiario;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao buscar beneficiário por ID: " + e.getMessage());
+        }
+        return null;
+    }
+
+
     public List<Beneficiario> listarTodos() {
         List<Beneficiario> beneficiarios = new ArrayList<>();
         String sql = "SELECT * FROM beneficiario ORDER BY nome";

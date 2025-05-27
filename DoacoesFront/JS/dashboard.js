@@ -13,11 +13,13 @@ document.addEventListener('DOMContentLoaded', async function () {
         const colaboradoresLink = document.getElementById('colaboradoresLink');
         const familiasLink = document.getElementById('familiasLink');
         const buscarLink = document.getElementById('buscarLink');
+        const efetuarLink = document.getElementById('efetuarLink');
     if (todosDoadoresLink) {
       todosDoadoresLink.classList.remove('hidden');
       colaboradoresLink.classList.remove('hidden');
       familiasLink.classList.remove('hidden');
       buscarLink.classList.remove('hidden');
+      efetuarLink.classList.remove('hidden');
     }
   }
 
