@@ -55,7 +55,6 @@ async function carregarColaboradores() {
 
 function formatarCPF(cpf) {
     if (!cpf) return 'Não informado';
-    // Remove caracteres não numéricos
     cpf = cpf.replace(/\D/g, '');
     // Aplica máscara: 000.000.000-00
     if (cpf.length === 11) {

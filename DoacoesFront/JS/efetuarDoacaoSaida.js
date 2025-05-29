@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => mensagemDiv.classList.add('hidden'), 5000);
     };
 
-    // Função para formatar status de doação
     const getStatusLabel = (status) => {
         switch (status) {
             case 'P': return 'Pendente';
@@ -128,10 +127,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Logout
     logoutButton.addEventListener('click', () => {
         localStorage.removeItem('idusuario');
-        window.location.href = 'login.html';
+        window.location.href = '/login.html';
     });
 
-    // Inicializar
     loadBeneficiarios();
     loadDoacoesEntrada();
 });

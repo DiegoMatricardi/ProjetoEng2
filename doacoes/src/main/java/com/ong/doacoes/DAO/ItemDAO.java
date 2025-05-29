@@ -1,11 +1,14 @@
 package com.ong.doacoes.DAO;
 
 import com.ong.doacoes.ConnectionFactory;
+import com.ong.doacoes.Model.Item;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemDAO {
 
@@ -50,5 +53,29 @@ public class ItemDAO {
                 return null;
             }
         }
+    }
+
+    public List<Item> buscarTodos() {
+        List<Item> itens = new ArrayList<>();
+        String sql = "SELECT iditem, descricao, iditem_tipo, estoque FROM item";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Item item = new Item();
+                item.setIdItem(rs.getLong("iditem"));
+                item.setDescricao(rs.getString("descricao"));
+                item.setIdItemTipo(rs.getLong("iditem_tipo"));
+                item.setEstoque(rs.getInt("estoque"));
+                itens.add(item);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao buscar itens: " + e.getMessage());
+        }
+
+        return itens;
     }
 }

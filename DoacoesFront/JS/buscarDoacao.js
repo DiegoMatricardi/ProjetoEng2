@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         return;
     }
 
-    // Mostrar links restritos para colaborador
     const todosDoadoresLink = document.getElementById('todosDoadoresLink');
     const colaboradoresLink = document.getElementById('colaboradoresLink');
     const familiasLink = document.getElementById('familiasLink');
@@ -212,7 +211,6 @@ function renderDoacoes(doacoes) {
         tbody.innerHTML += row;
     }
 
-    // Add event listeners for delete buttons
     document.querySelectorAll('.excluirBtn').forEach(button => {
         button.addEventListener('click', function () {
             const iddoacao_entrada = this.getAttribute('data-id');

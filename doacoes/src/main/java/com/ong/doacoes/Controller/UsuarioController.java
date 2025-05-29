@@ -42,6 +42,9 @@ public class UsuarioController {
             return new ResponseEntity<>(response, HttpStatus.CONFLICT);
         }
 
+        usuario.setAtivo(1);
+        usuario.setIdUsuarioTipo(1L);
+
         boolean sucesso = usuarioDAO.salvar(usuario);
         if (sucesso) {
             response.put("message", "Usuário criado com sucesso!");

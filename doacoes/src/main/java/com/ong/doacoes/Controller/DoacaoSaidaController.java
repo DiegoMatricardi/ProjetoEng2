@@ -42,7 +42,6 @@ public class DoacaoSaidaController {
             checkConnection(conn, "início da transação");
             conn.setAutoCommit(false);
 
-            // Validar colaborador
             String sqlUsuario = "SELECT idusuario_tipo FROM usuario WHERE idusuario = ?";
             try (PreparedStatement stmt = conn.prepareStatement(sqlUsuario)) {
                 stmt.setLong(1, Long.parseLong(idUsuario));

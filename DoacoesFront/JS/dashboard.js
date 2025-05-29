@@ -14,12 +14,14 @@ document.addEventListener('DOMContentLoaded', async function () {
         const familiasLink = document.getElementById('familiasLink');
         const buscarLink = document.getElementById('buscarLink');
         const efetuarLink = document.getElementById('efetuarLink');
+        const estoqueLink = document.getElementById('estoqueLink');
     if (todosDoadoresLink) {
       todosDoadoresLink.classList.remove('hidden');
       colaboradoresLink.classList.remove('hidden');
       familiasLink.classList.remove('hidden');
       buscarLink.classList.remove('hidden');
       efetuarLink.classList.remove('hidden');
+      estoqueLink.classList.remove('hidden');
     }
   }
 
@@ -33,7 +35,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.getElementById("logoutButton").addEventListener("click", function () {
         localStorage.removeItem("idusuario");
         localStorage.removeItem("idusuario_tipo");
-        window.location.href = "login.html";
+        window.location.href = "/login.html";
     });
 
     
