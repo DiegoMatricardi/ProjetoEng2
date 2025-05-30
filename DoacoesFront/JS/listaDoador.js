@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
       doadores.forEach(doador => {
         const card = document.createElement('div');
         card.className = 'bg-white rounded-lg shadow-md p-6 flex flex-col justify-between hover:shadow-xl transition-shadow duration-300';
-        console.log(doador)
+
         const inicial = doador.nome ? doador.nome.charAt(0).toUpperCase() : '?';
         card.innerHTML = `
           <div class="flex items-center space-x-4 mb-4">
@@ -32,6 +32,13 @@ document.addEventListener('DOMContentLoaded', () => {
             >
               Excluir
             </button>
+
+            <button 
+              onclick="promoverUsuario(${doador.idUsuario})" 
+              class="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-lg shadow-sm transition-colors duration-200"
+            >
+              Promover
+            </button>
           </div>
         `;
         container.appendChild(card);
@@ -42,10 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
       container.innerHTML = `<p class="text-red-600 text-center font-semibold">Erro ao carregar os doadores.</p>`;
     });
 });
-
-function editarDoador(id) {
-  window.location.href = `editarDoador.html?id=${id}`;
-}
 
 function excluirDoador(id) {
   if (confirm('Tem certeza que deseja excluir este doador?')) {
@@ -67,3 +70,22 @@ function excluirDoador(id) {
   }
 }
 
+function promoverUsuario(idUsuario) {
+  if (confirm('Deseja realmente promover este usuário?')) {
+    fetch(`http://localhost:8080/usuario/promover/${idUsuario}`, {
+      method: 'PUT'
+    })
+    .then(response => {
+      if (response.ok) {
+        alert('Usuário promovido com sucesso!');
+        location.reload();
+      } else {
+        alert('Erro ao promover o usuário.');
+      }
+    })
+    .catch(error => {
+      console.error('Erro na promoção:', error);
+      alert('Erro ao promover usuário.');
+    });
+  }
+}

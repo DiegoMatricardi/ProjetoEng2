@@ -88,22 +88,37 @@ async function carregarDoacoes() {
     try {
         const statusFilter = document.getElementById('statusFilter');
         const tipoItemFilter = document.getElementById('tipoItemFilter');
-        if (!statusFilter || !tipoItemFilter) {
+        const cpfFilter = document.getElementById('cpfFilter');
+
+        if (!statusFilter || !tipoItemFilter || !cpfFilter) {
             console.warn('Elementos de filtro não encontrados:', {
                 statusFilter: !!statusFilter,
-                tipoItemFilter: !!tipoItemFilter
+                tipoItemFilter: !!tipoItemFilter,
+                cpfFilter: !!cpfFilter
             });
             return;
         }
+
+        const cpf = cpfFilter.value.trim();
+
+        if (cpf !== '') {
+            // Busca só por CPF
+            await buscarDoacoesPorCpf(cpf);
+            return;
+        }
+
         const status = statusFilter.value;
         const tipoItem = tipoItemFilter.value;
+
         const params = new URLSearchParams();
         if (status !== 'Todos') params.append('status', status);
         if (tipoItem !== 'Todos') params.append('tipoItem', tipoItem);
+
         const response = await fetch(`http://localhost:8080/doacaoEntrada/listarDoacao?${params.toString()}`);
         if (!response.ok) {
             throw new Error(`Erro ${response.status}: ${await response.text()}`);
         }
+
         const doacoes = await response.json();
         renderDoacoes(doacoes);
     } catch (error) {
@@ -113,11 +128,10 @@ async function carregarDoacoes() {
             doacoesContainer.innerHTML = `
                 <p class="text-red-500 text-center">Erro ao carregar doações: ${error.message}. Tente novamente.</p>
             `;
-        } else {
-            console.warn('Elemento doacoesContainer não encontrado.');
         }
     }
 }
+
 
 async function deletarDoacao(iddoacao_entrada) {
     const mensagem = document.getElementById('mensagem');
@@ -157,6 +171,20 @@ async function deletarDoacao(iddoacao_entrada) {
         mensagem.textContent = 'Erro ao excluir doação: ' + error.message;
     }
 }
+
+async function buscarDoacoesPorCpf(cpf) {
+    try {
+        const response = await fetch(`http://localhost:8080/doacaoEntrada/buscarPorCpf/${cpf}`);
+        if (!response.ok) throw new Error(`Erro ${response.status}: ${await response.text()}`);
+        const doacoes = await response.json();
+        console.log(doacoes);
+        renderDoacoes(doacoes);
+    } catch (error) {
+        console.error("Erro ao buscar por CPF:", error);
+    }
+}
+
+
 
 function renderDoacoes(doacoes) {
     const tbody = document.getElementById('doacoesTabela');

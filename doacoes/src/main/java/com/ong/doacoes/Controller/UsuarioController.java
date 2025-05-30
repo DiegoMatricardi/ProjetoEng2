@@ -1,11 +1,13 @@
 package com.ong.doacoes.Controller;
 
+import com.ong.doacoes.ConnectionFactory;
 import com.ong.doacoes.DAO.UsuarioDAO;
 import com.ong.doacoes.Model.Usuario;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,5 +57,22 @@ public class UsuarioController {
         }
     }
 
+    @PutMapping("/promover/{id}")
+    public String promoverUsuario(@PathVariable("id") Long idUsuario) {
+        try (Connection conn = ConnectionFactory.getConnection()) {
+            UsuarioDAO usuarioDAO = new UsuarioDAO();
+            boolean sucesso = usuarioDAO.promoverParaTipo2(conn, idUsuario);
 
+            if (sucesso) {
+                return "Usuário promovido com sucesso.";
+            } else {
+                return "Erro ao promover usuário.";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Erro interno no servidor.";
+        }
+    }
 }
+
+

@@ -97,4 +97,17 @@ public class UsuarioDAO {
 
         return null;
     }
+
+    public boolean promoverParaTipo2(Connection conn, Long idUsuario) {
+        String sql = "UPDATE usuario SET idusuario_tipo = 2 WHERE idusuario = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, idUsuario);
+            int linhasAfetadas = stmt.executeUpdate();
+            return linhasAfetadas > 0;
+        } catch (SQLException e) {
+            System.err.println("Erro ao promover usuário: " + e.getMessage());
+            return false;
+        }
+    }
 }

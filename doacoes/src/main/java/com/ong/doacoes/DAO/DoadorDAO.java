@@ -154,5 +154,28 @@ public class DoadorDAO {
         }
     }
 
+    public Doador buscarPorCpf(String cpf) {
+        String sql = "SELECT * FROM doador WHERE cpf = ?";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, cpf);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Doador doador = new Doador();
+                    doador.setIdDoador(rs.getLong("iddoador"));
+                    doador.setIdUsuario(rs.getLong("idusuario"));
+                    doador.setCpf(rs.getString("cpf"));
+                    doador.setEmail(rs.getString("email"));
+                    doador.setNome(rs.getString("nome"));
+                    doador.setTelefone(rs.getString("telefone"));
+                    return doador;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao buscar doador por CPF: " + e.getMessage());
+        }
+        return null;
+    }
 
 }

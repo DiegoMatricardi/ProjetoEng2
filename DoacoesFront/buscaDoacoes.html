@@ -29,6 +29,11 @@
             <div id="mensagem" class="hidden p-4 mb-4 rounded"></div>
             <div class="flex flex-col sm:flex-row gap-4">
                 <div class="flex-1">
+                    <label for="cpfFilter" class="block text-sm font-medium text-gray-700">CPF do Doador</label>
+                    <input type="text" id="cpfFilter" placeholder="Digite o CPF" 
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+                </div>
+                <div class="flex-1">
                     <label for="statusFilter" class="block text-sm font-medium text-gray-700">Status</label>
                     <select id="statusFilter" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                         <option value="Todos">Todos</option>
@@ -68,5 +73,6 @@
     </div>
 
     <script src="./JS/buscarDoacao.js"></script>
+    
 </body>
 </html>

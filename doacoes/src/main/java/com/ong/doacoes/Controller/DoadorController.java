@@ -103,4 +103,18 @@ public class DoadorController {
         }
     }
 
+    @GetMapping("/buscarPorCpf")
+    public ResponseEntity<Doador> buscarPorCpf(@RequestParam String cpf) {
+        if (cpf == null || cpf.trim().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Doador doador = dao.buscarPorCpf(cpf.trim());
+        if (doador != null) {
+            return ResponseEntity.ok(doador);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
 }

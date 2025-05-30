@@ -161,7 +161,7 @@ public class DoacaoEntradaController {
     @GetMapping("/listarDoacao")
     public ResponseEntity<?> listar(
             @RequestParam(value = "status", required = false) String status,
-            @RequestParam(value = "tipoItem", required = false) String tipoItem) {
+            @RequestParam(value = "tipoItem", required = false) String tipoItem)  {
         try {
             if (status != null && !status.isEmpty() && !STATUS_PERMITIDOS.contains(status) && !status.equals("Todos")) {
                 return ResponseEntity.badRequest().body("Status inválido. Use: " + STATUS_PERMITIDOS + " ou 'Todos'.");
@@ -291,6 +291,63 @@ public class DoacaoEntradaController {
                     System.err.println("Erro ao fechar conexão: " + e.getMessage());
                 }
             }
+        }
+    }
+
+    @GetMapping("/buscarPorCpf/{cpf}")
+    public ResponseEntity<?> buscarPorCpf(@PathVariable String cpf) {
+        try {
+            DoadorDAO doadorDAO = new DoadorDAO();
+            Doador doador = doadorDAO.buscarPorCpf(cpf);
+
+            if (doador == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doador não encontrado.");
+            }
+
+            DoacaoEntradaDAO doacaoDAO = new DoacaoEntradaDAO();
+            List<DoacaoEntrada> doacoes = doacaoDAO.listarPorIdUsuario(doador.getIdUsuario());
+
+            List<Map<String, Object>> response = doacoes.stream().map(doacao -> {
+                Map<String, Object> doacaoMap = new HashMap<>();
+                doacaoMap.put("iddoacao_entrada", doacao.getIddoacaoentrada());
+                doacaoMap.put("data_abertura", doacao.getDataAbertura());
+                doacaoMap.put("status", doacao.getStatus());
+                doacaoMap.put("data_fim", doacao.getDataFim() != null ? doacao.getDataFim() : "Não informado");
+                doacaoMap.put("endereco_busca", doacao.getEnderecoBusca() != null && !doacao.getEnderecoBusca().isEmpty() ? doacao.getEnderecoBusca() : "Não informado");
+                doacaoMap.put("observacao", doacao.getObservacao() != null && !doacao.getObservacao().isEmpty() ? doacao.getObservacao() : "Nenhuma");
+
+                List<Map<String, Object>> itens = doacao.getItens().stream().map(item -> {
+                    Map<String, Object> itemMap = new HashMap<>();
+                    itemMap.put("iddoacaoEntradaItem", item.getIddoacaoEntradaItem());
+                    itemMap.put("idItem", item.getIdItem());
+                    itemMap.put("descricao", item.getDescricao());
+                    itemMap.put("valor_qtde_doacao_entrada_item", item.getValorQtdeDoacaoEntradaItem());
+
+                    try (Connection conn = ConnectionFactory.getConnection();
+                         PreparedStatement stmt = conn.prepareStatement(
+                                 "SELECT it.nome FROM item i JOIN item_tipo it ON i.iditem_tipo = it.iditem_tipo WHERE i.iditem = ?")) {
+                        stmt.setLong(1, item.getIdItem());
+                        try (ResultSet rs = stmt.executeQuery()) {
+                            if (rs.next()) {
+                                itemMap.put("nomeItemTipo", rs.getString("nome"));
+                            }
+                        }
+                    } catch (SQLException e) {
+                        System.err.println("Erro ao buscar nomeItemTipo: " + e.getMessage());
+                    }
+
+                    return itemMap;
+                }).collect(Collectors.toList());
+
+                doacaoMap.put("itens", itens);
+                return doacaoMap;
+            }).collect(Collectors.toList());
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao buscar doações por CPF: " + e.getMessage());
         }
     }
 }
